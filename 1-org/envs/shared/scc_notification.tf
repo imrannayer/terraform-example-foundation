@@ -39,3 +39,11 @@ resource "google_scc_notification_config" "scc_notification_config" {
     filter = var.scc_notification_filter
   }
 }
+
+resource "google_pubsub_topic_iam_member" "scc_iam_member" {
+  project = google_pubsub_topic.scc_notification_topic.project
+  topic   = google_pubsub_topic.scc_notification_topic.name
+  role    = "roles/pubsub.publisher"
+  member  = "serviceAccount:${google_scc_notification_config.scc_notification_config.service_account}"
+}
+
